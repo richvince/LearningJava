@@ -3,8 +3,6 @@ package innerclasses;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import innerclass.InnerClassDemo.InnerImpl;
-
 public class InnerMain {
 
 	static public void main(String[] args) {
