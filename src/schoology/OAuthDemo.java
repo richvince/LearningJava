@@ -3,9 +3,7 @@ package schoology;
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
-import oauth.signpost.OAuthProviderListener;
 import oauth.signpost.basic.DefaultOAuthConsumer;
-import oauth.signpost.basic.DefaultOAuthProvider;
 
 public class OAuthDemo {
 
@@ -16,18 +14,22 @@ public class OAuthDemo {
 		OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, consumerSecret);
 		
 		String baseUrl = "https://api.schoology.com/v1";
-		String accessTokenUrl = baseUrl + "/oauth/access_token";
+		String appBaseUrl = "https://app.schoology.com";
+		String accessTokenUrl = baseUrl + "/oauth/access_token?uid=28236413";
 		String requestTokenUrl = baseUrl + "/oauth/request_token";
-		String authorizeUrl = baseUrl + "/oauth/authorize?return_url=url&oauth_token=";
+		String authorizeUrl = appBaseUrl + "/oauth/authorize";
 		
-		OAuthProvider provider = new DefaultOAuthProvider(requestTokenUrl, accessTokenUrl, authorizeUrl);
+		OAuthProvider provider = new SchoologyOAuthProvider(requestTokenUrl, accessTokenUrl, authorizeUrl);
 		
 		System.out.println("Fetching request token... ");
 		
-		String authUrl = provider.retrieveRequestToken(consumer, OAuth.OUT_OF_BAND);
+		String returnUrl = "https://test1.assistments.org";
+		returnUrl = OAuth.percentEncode(returnUrl);
+		String authUrl = provider.retrieveRequestToken(consumer, returnUrl);
 		
 		System.out.println("Request token: " + consumer.getToken());
 		System.out.println("Token secret: " + consumer.getTokenSecret());
+		System.out.println(authUrl.replace("oauth_callback", "return_url"));
 		
 	}
 }
